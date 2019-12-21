@@ -3,11 +3,14 @@
   "name": "Median",
   "version": "1.0.0",
   "description": "Browser extension that brings LaTeX to Medium",
+  "permissions": [
+    "https://quicklatex.com/*"
+  ],
   "content_scripts": [
     {
       "matches": ["https://medium.com/p/*/edit", "https://medium.com/new-story"],
       "css": [],
-      "js": ["injector.js"]
+      "js": ["utils.js", "injector.js"]
     }
   ]
 }
