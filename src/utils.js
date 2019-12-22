@@ -14,8 +14,8 @@ async function createMathImage(rawMath, fontSize, fontColor) {
   });
   const text = await response.text();
   const secondLine = text.split('\n')[1];
-  const [url, , width, height] = secondLine.split(' ');
-  return [url, width, height];
+  const [uri] = secondLine.split(' ');
+  return uri;
 }
 
 async function createMathImageFile(imageUri) {
@@ -25,9 +25,13 @@ async function createMathImageFile(imageUri) {
   return new File([blob], fileName, { type: 'image/png' });
 }
 
-function placeFileIntoPost(file) {
+function placeFileIntoPost(file, x, y) {
   const dataTransfer = new DataTransfer();
   dataTransfer.items.add(file);
-  const event = new DragEvent('drop', { dataTransfer });
+  const event = new DragEvent('drop', {
+    clientX: x,
+    clientY: y,
+    dataTransfer,
+  });
   document.body.dispatchEvent(event);
 }
