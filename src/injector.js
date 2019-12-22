@@ -1,3 +1,5 @@
+/* global createMathImage, createMathImageFile, placeFileIntoPost */
+
 const HIGHLIGHTMENU_TEXT = '.highlightMenu:last-child';
 const HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER = `${HIGHLIGHTMENU_TEXT} > .highlightMenu-inner > .buttonSet`;
 const HIGHLIGHTMENU_TEXT_ACTIVE_CLASS = 'highlightMenu--active';

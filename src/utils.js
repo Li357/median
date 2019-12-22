@@ -1,5 +1,7 @@
 const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
+/* exported createMathImage, createMathImageFile, placeFileIntoPost */
+
 const QUICKLATEX_API = 'https://quicklatex.com/latex3.f';
 
 async function createMathImage(rawMath, fontSize, fontColor) {
