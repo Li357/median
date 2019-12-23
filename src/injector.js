@@ -33,9 +33,8 @@ function injectMedian() {
   buttonsContainer.appendChild(median);
 }
 
-setTimeout(() => {
+function startMedian() {
   injectMedian();
-
   const observer = new MutationObserver((mutationList) => {
     mutationList.forEach((mutation) => {
       if (mutation.type === 'childList' && mutation.target.classList.contains(HIGHLIGHTMENU_TEXT_ACTIVE_CLASS)) {
@@ -44,4 +43,22 @@ setTimeout(() => {
     });
   });
   observer.observe(document.querySelector(HIGHLIGHTMENU_TEXT), { childList: true });
-}, 3000);
+}
+
+const highlightMenuObserver = new MutationObserver((mutationList) => {
+  mutationList.forEach((mutation) => {
+    if (!mutation.addedNodes) {
+      return;
+    }
+    mutation.addedNodes.forEach((node) => {
+      if  (node === document.querySelector(HIGHLIGHTMENU_TEXT)) {
+        startMedian();
+        highlightMenuObserver.disconnect();
+      }
+    });
+  });
+});
+highlightMenuObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+});
