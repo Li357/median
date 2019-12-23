@@ -24,11 +24,15 @@ async function createMathImageFile(imageUri) {
   const response = await fetch(imageUri);
   const blob = await response.blob();
   const fileName = imageUri.slice(imageUri.lastIndexOf('/') + 1);
-  return new File([blob], fileName, { type: 'image/png' });
+  return new File([blob], fileName, { type: 'image/gif' });
 }
 
 function placeFileIntoPost(file, x, y) {
-  const dataTransfer = new DataTransfer();
+  let dataTransfer = new DataTransfer();
+  if ('wrappedJSObject' in window) { // Handles Firefox Xray vision, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
+    dataTransfer = new window.wrappedJSObject.DataTransfer();
+  }
+
   dataTransfer.items.add(file);
   const event = new DragEvent('drop', {
     clientX: x,

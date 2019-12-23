@@ -44,4 +44,4 @@ setTimeout(() => {
     });
   });
   observer.observe(document.querySelector(HIGHLIGHTMENU_TEXT), { childList: true });
-}, 1000);
+}, 3000);
