@@ -4,13 +4,18 @@
   "version": "1.0.0",
   "description": "Browser extension that brings LaTeX to Medium",
   "permissions": [
-    "https://quicklatex.com/*"
+    "https://quicklatex.com/*",
+    "https://medium.com/*",
+    "tabs",
+    "webNavigation"
   ],
   "content_scripts": [
     {
-      "matches": ["https://medium.com/p/*/edit", "https://medium.com/new-story"],
-      "css": [],
+      "matches": ["https://medium.com/*"],
       "js": ["utils.js", "injector.js"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }
