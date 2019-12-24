@@ -1,6 +1,6 @@
-const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
+/* exported createMathImage, createMathImageFile, placeFileIntoPost, createHighlightMenuButton */
 
-/* exported createMathImage, createMathImageFile, placeFileIntoPost */
+const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
 const QUICKLATEX_API = 'https://quicklatex.com/latex3.f';
 
