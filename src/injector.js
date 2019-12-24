@@ -1,4 +1,4 @@
-/* global createMathImage, createMathImageFile, placeFileIntoPost, createHighlightMenuButton */
+/* global createMathImage, createMathImageFile, placeFileIntoPost */
 
 const HIGHLIGHTMENU_TEXT_ACTIVE_CLASS = 'highlightMenu--active';
 const HIGHLIGHTMENU_TEXT = '.highlightMenu:last-child';

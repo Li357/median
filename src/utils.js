@@ -1,4 +1,4 @@
-/* exported createMathImage, createMathImageFile, placeFileIntoPost, createHighlightMenuButton */
+/* exported createMathImage, createMathImageFile, placeFileIntoPost */
 
 const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
