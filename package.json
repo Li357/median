@@ -1,14 +1,16 @@
 {
   "name": "median",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Browser extension that brings LaTeX to Medium",
   "repository": "https://github.com/Li357/median.git",
   "author": "Andrew Li",
   "license": "MIT",
   "scripts": {
+    "build": "node build.js build/",
     "lint": "npx eslint --ext .js src/"
   },
   "devDependencies": {
+    "archiver": "^3.1.1",
     "eslint": "^6.8.0",
     "husky": "^4.0.0-beta.5",
     "web-ext": "^3.2.1"
