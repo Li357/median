@@ -1,8 +1,10 @@
 /* global createMathImage, createMathImageFile, placeFileIntoPost */
 
-const HIGHLIGHTMENU_TEXT_ACTIVE_CLASS = 'highlightMenu--active';
-const HIGHLIGHTMENU_TEXT = '.highlightMenu:last-child';
-const HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER = `${HIGHLIGHTMENU_TEXT} > .highlightMenu-inner > .buttonSet`;
+const HIGHLIGHTMENU_CLASS = 'highlightMenu';
+const HIGHLIGHTMENU_TEXT_ACTIVE_CLASS = `${HIGHLIGHTMENU_CLASS}--active`;
+
+const HIGHLIGHTMENU_TEXT = `.${HIGHLIGHTMENU_CLASS}:last-child`;
+const HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER = `.${HIGHLIGHTMENU_CLASS}-inner > .buttonSet`;
 const HIGHLIGHTMENU_TEXT_DIVIDER = `${HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER} > .buttonSet-separator`;
 const HIGHLIGHTMENU_BUTTON = `${HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER} > .button--highlightMenu[data-action=link]`; // Link icon has no state
 
@@ -21,52 +23,33 @@ function createHighlightMenuButton(type, size, iconPath) {
 async function injectMath(rawMath, fontSize, fontColor, x, y) {
   const uri = await createMathImage(rawMath, fontSize, fontColor);
   const file = await createMathImageFile(uri);
-  const event = new KeyboardEvent('keydown', { key: 'Backspace' }); // can't remove range directly (or else corrupts Medium post)
-  document.querySelector(POST_CONTENT).dispatchEvent(event);
   placeFileIntoPost(file, x, y);
 }
 
-function injectMedian() {
+function injectMedian(textHighlightMenu) {
   const median = createHighlightMenuButton('math', 21, SIGMA_PATH);
-  median.addEventListener('click', () => {
+  median.addEventListener('click', async () => {
     const selection = window.getSelection();
     const selectionText = selection.toString();
     const { x, y } = selection.getRangeAt(0).getBoundingClientRect();
-    injectMath(selectionText, 30, '000000', x, y);
+    await injectMath(selectionText, 30, '000000', x, y);
+    // TODO: selection.deleteFromDocument(); deleting still doesn't work
   });
 
-  const divider = document.querySelector(HIGHLIGHTMENU_TEXT_DIVIDER).cloneNode(true);
-  const buttonsContainer = document.querySelector(HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER);
+  const divider = textHighlightMenu.querySelector(HIGHLIGHTMENU_TEXT_DIVIDER).cloneNode(true);
+  const buttonsContainer = textHighlightMenu.querySelector(HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER);
   buttonsContainer.appendChild(divider);
   buttonsContainer.appendChild(median);
 }
 
-function startMedian() {
-  injectMedian();
-  const observer = new MutationObserver((mutationList) => {
-    mutationList.forEach((mutation) => {
-      if (mutation.type === 'childList' && mutation.target.classList.contains(HIGHLIGHTMENU_TEXT_ACTIVE_CLASS)) {
-        injectMedian();
-      }
-    });
+function startMedian(textHighlightMenu) {
+  // Medium triggers observer for all menu buttons, so only first needed
+  const observer = new MutationObserver(([mutation]) => {
+    if (mutation.target.classList.contains(HIGHLIGHTMENU_TEXT_ACTIVE_CLASS)) {
+      injectMedian(textHighlightMenu);
+    }
   });
-  observer.observe(document.querySelector(HIGHLIGHTMENU_TEXT), { childList: true });
+  observer.observe(textHighlightMenu, { attributes: true });
 }
 
-const highlightMenuObserver = new MutationObserver((mutationList) => {
-  mutationList.forEach((mutation) => {
-    if (!mutation.addedNodes) {
-      return;
-    }
-    mutation.addedNodes.forEach((node) => {
-      if  (node === document.querySelector(HIGHLIGHTMENU_TEXT)) {
-        startMedian();
-        highlightMenuObserver.disconnect();
-      }
-    });
-  });
-});
-highlightMenuObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
+startMedian(document.querySelector(HIGHLIGHTMENU_TEXT));
