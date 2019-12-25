@@ -8,6 +8,8 @@ const HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER = `.${HIGHLIGHTMENU_CLASS}-inner > .b
 const HIGHLIGHTMENU_TEXT_DIVIDER = `${HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER} > .buttonSet-separator`;
 const HIGHLIGHTMENU_BUTTON = `${HIGHLIGHTMENU_TEXT_BUTTONS_CONTAINER} > .button--highlightMenu[data-action=link]`; // Link icon has no state
 
+const POST_CONTENT = '.postArticle-content';
+
 const SIGMA_PATH = 'M3.63,2.05v.56l6.53,8.08L3.63,18.52V19l12.75-.08c.16-1.62.48-3.23.73-4.76l-.41-.08a5.73,5.73,0,0,1-1.45,2.42,5.31,5.31,0,0,1-3.15.56H6.21l6-7.26L6.77,3.1H9.92c2,0,4.85-.49,5.65,1.94a3.33,3.33,0,0,1,.24,1.29h.49L16,2.13H3.63Z';
 
 function createHighlightMenuButton(type, size, iconPath) {
@@ -31,7 +33,10 @@ function injectMedian(textHighlightMenu) {
     const selectionText = selection.toString();
     const { x, y } = selection.getRangeAt(0).getBoundingClientRect();
     await injectMath(selectionText, 30, '000000', x, y);
-    document.execCommand('delete', false, null); // https://medium.engineering/why-contenteditable-is-terrible-122d8a40e480
+    
+    // https://medium.engineering/why-contenteditable-is-terrible-122d8a40e480
+    const evt = new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8 }); // both key and keyCode needed for Chrome/Firefox
+    document.querySelector(POST_CONTENT).dispatchEvent(evt);
   });
 
   const divider = textHighlightMenu.querySelector(HIGHLIGHTMENU_TEXT_DIVIDER).cloneNode(true);
