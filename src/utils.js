@@ -4,6 +4,8 @@ const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
 const QUICKLATEX_API = 'https://quicklatex.com/latex3.f';
 
+const POST_CONTENT = '.postArticle-content';
+
 async function createMathImage(rawMath, fontSize, fontColor) {
   const preambleStatements = rawMath.match(LATEX_USEPACKAGE_STATEMENT);
   const preamble = preambleStatements !== null ? preambleStatements.join('\n') : '';
@@ -40,4 +42,10 @@ function placeFileIntoPost(file, x, y) {
     dataTransfer,
   });
   document.body.dispatchEvent(event);
+}
+
+function deleteSelection() {
+  // https://medium.engineering/why-contenteditable-is-terrible-122d8a40e480
+  const evt = new KeyboardEvent('keydown', { key: 'Backspace', keyCode: 8 }); // both key and keyCode needed for Chrome/Firefox
+  document.querySelector(POST_CONTENT).dispatchEvent(evt);
 }
