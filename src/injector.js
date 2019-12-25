@@ -1,4 +1,4 @@
-/* global createMathImage, createMathImageFile, placeFileIntoPost */
+/* global createMathImage, createMathImageFile, placeFileIntoPost, deleteSelection */
 
 const HIGHLIGHTMENU_CLASS = 'highlightMenu';
 const HIGHLIGHTMENU_ACTIVE_CLASS = `${HIGHLIGHTMENU_CLASS}--active`;
@@ -74,7 +74,7 @@ function injectImageOptions(mediaHighlightMenu) {
   fontSizeInput.addEventListener('input', (event) => {
     fontSizeIndicator.innerText = `${event.target.value}px`;
   });
-  fontSizeInput.addEventListener('change', (event) => {
+  fontSizeInput.addEventListener('change', () => {
     // TODO
   });
 

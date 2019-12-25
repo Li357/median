@@ -1,4 +1,4 @@
-/* exported createMathImage, createMathImageFile, placeFileIntoPost */
+/* exported createMathImage, createMathImageFile, placeFileIntoPost, deleteSelection */
 
 const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
