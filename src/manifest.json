@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Median",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Browser extension that brings LaTeX to Medium",
   "permissions": [
     "https://quicklatex.com/*",
