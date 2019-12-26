@@ -10,4 +10,5 @@
 
 # Installation
 
+- [Get the Chrome extension](https://chrome.google.com/webstore/detail/median/anceofoolakbkhkpmkajcflfhjadmahp)
 - [Get the Firefox add-on](https://addons.mozilla.org/en-US/firefox/addon/median/)
