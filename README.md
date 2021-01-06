@@ -16,3 +16,13 @@
 # How it works
 
 The extension sends a request to [QuickLaTeX](https://www.quicklatex.com/), a web service that allows you to typeset LaTeX with a simple API request. An image URI is returned, which is then fetched and transformed into a File. This File object is used to simulate a drop event in the Medium editor.
+
+# Building
+
+Running
+
+```
+node ./build.js ./build
+```
+
+produces a `Median.zip` file in the `build/` directory.

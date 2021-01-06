@@ -1,8 +1,7 @@
+/* global chrome, browser */
 /* exported createMathImage, createMathImageFile, placeFileIntoPost */
 
 const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
-
-const api = typeof chrome !== 'undefined' ? chrome : browser;
 
 function sendMessage(message) {
   const isChrome = typeof chrome !== 'undefined';

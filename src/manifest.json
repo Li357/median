@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Median",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Andrew Li",
   "description": "Browser extension that brings LaTeX to Medium",
   "permissions": [
