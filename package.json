@@ -1,6 +1,6 @@
 {
   "name": "median",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Browser extension that brings LaTeX to Medium",
   "repository": "https://github.com/Li357/median.git",
   "author": "Andrew Li",
