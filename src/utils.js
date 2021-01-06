@@ -2,34 +2,44 @@
 
 const LATEX_USEPACKAGE_STATEMENT = /(\\usepackage.+)/g;
 
-const QUICKLATEX_API = 'https://quicklatex.com/latex3.f';
+const api = typeof chrome !== 'undefined' ? chrome : browser;
+
+function sendMessage(message) {
+  const isChrome = typeof chrome !== 'undefined';
+  if (isChrome) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(message, (response) => {
+        if (response) {
+          return resolve(response);
+        }
+        reject(chrome.runtime.lastError);
+      });
+    });
+  }
+  return browser.runtime.sendMessage(message);
+}
 
 async function createMathImage(rawMath, fontSize, fontColor) {
   const preambleStatements = rawMath.match(LATEX_USEPACKAGE_STATEMENT);
   const preamble = preambleStatements !== null ? preambleStatements.join('\n') : '';
   const math = rawMath.replace(LATEX_USEPACKAGE_STATEMENT, '');
 
-  const response = await fetch(QUICKLATEX_API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-urlencoded' },
-    body: `preamble=${preamble}&formula=${encodeURIComponent(math)}&fsize=${`${fontSize}px`}&fcolor=${fontColor}`,
-  });
-  const text = await response.text();
-  const secondLine = text.split('\n')[1];
-  const [uri] = secondLine.split(' ');
-  return uri;
+  const imagePath = await sendMessage({ type: 'getTypesetImageUri', preamble, math, fontSize, fontColor });
+  return imagePath;
 }
 
-async function createMathImageFile(imageUri) {
-  const response = await fetch(imageUri);
+async function createMathImageFile(imagePath) {
+  const base64 = await sendMessage({ type: 'getTypesetImageBase64', imagePath });
+  const response = await fetch(base64); // convert base64 to blob
   const blob = await response.blob();
-  const fileName = imageUri.slice(imageUri.lastIndexOf('/') + 1);
-  return new File([blob], fileName, { type: 'image/gif' });
+  const fileName = imagePath.slice(imagePath.lastIndexOf('/') + 1);
+  return new File([blob], fileName, { type: 'image/png' });
 }
 
 function placeFileIntoPost(file, x, y) {
   let dataTransfer = new DataTransfer();
-  if ('wrappedJSObject' in window) { // Handles Firefox Xray vision, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
+  if ('wrappedJSObject' in window) {
+    // Handles Firefox Xray vision, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
     dataTransfer = new window.wrappedJSObject.DataTransfer();
   }
 
